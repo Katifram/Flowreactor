@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../../../../../PycharmProjects/Flowreactor/ANET_A8_firmware"
+		},
+		{
+			"name": "anet_cam_controller",
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
