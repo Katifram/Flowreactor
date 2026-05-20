@@ -248,21 +248,24 @@ void serviceSerial() {
 }
 
 void serviceCommandExecutor() {
-  if (commandActive) {
-    if (activeCommand.type == CMD_STEP) {
-      if (!motionIsStepRunning()) {
-        if (!stepCompletionReported) {
-          Serial.println("OK STEP DONE");
-          stepCompletionReported = true;
-        }
-        finishActiveCommand();
+  // Check if active STEP command has completed
+  if (commandActive && activeCommand.type == CMD_STEP) {
+    if (!motionIsStepRunning()) {
+      if (!stepCompletionReported) {
+        Serial.println("OK STEP DONE");
+        stepCompletionReported = true;
       }
+      finishActiveCommand();
+    } else {
+      return;  // Step still running, don't dequeue yet
     }
-    return;
   }
 
-  Command nextCmd;
-  if (dequeueCommand(nextCmd)) {
-    startCommand(nextCmd);
+  // Try to dequeue and execute next command only if none is currently active
+  if (!commandActive) {
+    Command nextCmd;
+    if (dequeueCommand(nextCmd)) {
+      startCommand(nextCmd);
+    }
   }
 }
